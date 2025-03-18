@@ -1,4 +1,5 @@
-# Recreation of TARS (The robot from Interstellar)
+# ARST: Autonomous Dual-Mode Robotic System
+###### Recreation of the robot TARS from the movie Interstellar, but IDK anything about copyright so I'm calling it ARST
 
 This is a recreation of TARS, the robot from the movie Interstellar. This repository is the source code for the robot. The robot can move around, talk, and respond to voice commands.
 
