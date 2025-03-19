@@ -25,11 +25,6 @@ while True:
     # Then send the actual JPEG data.
     client_socket.sendall(data)
 
-    # Optionally, display the local feed.
-    cv2.imshow("Video Client", frame)
-    if cv2.waitKey(1) == 13:  # Press Enter key to exit.
-        break
-
 cap.release()
 client_socket.close()
 cv2.destroyAllWindows()
