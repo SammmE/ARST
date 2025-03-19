@@ -4,7 +4,7 @@ import struct
 
 # Connect to the TCP server (running in the Rust module on port 8888)
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect(("localhost", 8888))
+client_socket.connect(("localhost", 8888)) # Change to the server's IP address (I am NOT leaking my IP address!)
 
 cap = cv2.VideoCapture(0)
 if not cap.isOpened():
