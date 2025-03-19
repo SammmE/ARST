@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "fastapi[standard]>=0.115.11",
     "langchain-ollama>=0.2.3",
     "numpy>=1.26.4",
     "openai-whisper>=20240930",
