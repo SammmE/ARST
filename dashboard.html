@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TARS Live Dashboard</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS for styling -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <style>
+        body {
+            margin: 20px;
+        }
+
+        #video {
+            width: 100%;
+            max-width: 640px;
+            height: auto;
+            border: 2px solid #333;
+        }
+
+        .card {
+            margin-bottom: 20px;
+        }
+
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mb-4">TARS Live Dashboard</h1>
+        <div class="row">
+            <div class="col-md-8">
+                <img id="video" src="" alt="Live video feed" />
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">Timestamp</div>
+                    <div class="card-body">
+                        <p id="timestamp" class="card-text">Loading...</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Meta Payload</div>
+                    <div class="card-body">
+                        <pre id="meta_payload" class="card-text">Loading...</pre>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Meta Response</div>
+                    <div class="card-body">
+                        <pre id="meta_response" class="card-text">Loading...</pre>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Observations</div>
+                    <div class="card-body">
+                        <pre id="observations" class="card-text">Loading...</pre>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">Pathfinding</div>
+                    <div class="card-body">
+                        <p id="pathfinding" class="card-text">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Open a WebSocket connection for the video stream.
+        var ws = new WebSocket("ws://" + location.host + "/ws");
+        ws.binaryType = "arraybuffer";
+        ws.onmessage = function (event) {
+            var blob = new Blob([event.data], { type: "image/jpeg" });
+            document.getElementById("video").src = URL.createObjectURL(blob);
+        };
+
+        // Function to fetch meta data from the GET endpoint.
+        async function fetchMetaData() {
+            try {
+                const response = await fetch("/meta_data");
+                const data = await response.json();
+
+                document.getElementById("timestamp").textContent = data.timestamp;
+                document.getElementById("meta_payload").textContent = JSON.stringify(data.meta_payload, null, 2);
+                document.getElementById("meta_response").textContent = JSON.stringify(data.meta_response, null, 2);
+                document.getElementById("observations").textContent = JSON.stringify(data.observations, null, 2);
+                document.getElementById("pathfinding").textContent = data.pathfinding;
+            } catch (err) {
+                console.error("Error fetching meta data:", err);
+            }
+        }
+
+        // Poll the /meta_data endpoint every 2 seconds.
+        setInterval(fetchMetaData, 2000);
+        fetchMetaData();
+    </script>
+</body>
+
+</html>
